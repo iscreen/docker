@@ -1,0 +1,22 @@
+#!/bin/bash
+echo ""
+echo "Checking MySQL data folder"
+docker-machine ssh default "[ ! -d ~/mysqldata ] && mkdir -p ~/mysqldata"
+echo "Restore mysql data"
+docker-machine ssh default "sudo cp -Rf /Users/iscreen/data/docker/container/mysqldata/* ~/mysqldata/"
+docker-machine ssh default "sudo chown 999 -Rf ~/mysqldata/"
+echo "Done."
+
+echo "Checking MySQL 5.7 data folder"
+docker-machine ssh default "[ ! -d ~/mysqldata-5.7 ] && mkdir -p ~/mysqldata-5.7"
+echo "Restore mysql 5.7 data"
+docker-machine ssh default "sudo cp -Rf /Users/iscreen/data/docker/container/mysqldata-5.7/* ~/mysqldata-5.7/"
+docker-machine ssh default "sudo chown 999 -Rf ~/mysqldata-5.7/"
+echo "Done."
+
+echo ""
+echo "Checking Maria data folder"
+docker-machine ssh default "[ ! -d ~/mariadata ] && mkdir -p ~/mariadata"
+echo "Restore maria data"
+docker-machine ssh default "sudo cp -Rf /Users/iscreen/data/docker/container/mariadata/* ~/mariadata/"
+echo "Done."

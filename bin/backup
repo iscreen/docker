@@ -1,0 +1,22 @@
+#!/bin/bash
+echo ""
+echo "Backup mysql data"
+[ ! -d /Users/iscreen/data/docker/container/mysqldata/ ] && mkdir -p /Users/iscreen/data/docker/container/mysqldata/
+rm -rf /Users/iscreen/data/docker/container/mysqldata/*
+docker-machine ssh default "sudo cp -Rf ~/mysqldata/* /Users/iscreen/data/docker/container/mysqldata/"
+echo "Done."
+
+echo ""
+echo "Backup mysql 5.7 data"
+[ ! -d /Users/iscreen/data/docker/container/mysqldata-5.7/ ] && mkdir -p /Users/iscreen/data/docker/container/mysqldata-5.7/
+rm -rf /Users/iscreen/data/docker/container/mysqldata-5.7/*
+docker-machine ssh default "sudo cp -Rf ~/mysqldata-5.7/* /Users/iscreen/data/docker/container/mysqldata-5.7/"
+echo "Done."
+
+echo ""
+echo "Backup maria data"
+[ ! -d /Users/iscreen/data/docker/container/mariadata/ ] && mkdir -p /Users/iscreen/data/docker/container/mariadata/
+rm -rf /Users/iscreen/data/docker/container/mariadata/*
+docker-machine ssh default "sudo cp -Rf ~/mariadata/* /Users/iscreen/data/docker/container/mariadata/"
+echo "Done."
+

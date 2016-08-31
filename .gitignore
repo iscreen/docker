@@ -1,0 +1,13 @@
+.DS_Store
+
+container
+
+docker-sphinx
+
+gitlab/gitlab
+gitlab/postgresql
+gitlab/redis
+gitlab/gitlab-runner
+gitlab/log
+
+gitlab-runner
