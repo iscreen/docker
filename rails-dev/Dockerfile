@@ -29,7 +29,7 @@ RUN mkdir /var/run/sshd
 # Create default user
 RUN useradd -m -G sudo,root -s /bin/bash ubuntu
 # Gem setting for root/ubuntu
-RUN sudo -u ubuntu -H bash -l -c "echo 'gem: --no-rdoc --no-ri' >> /home/ubuntu/.gemrc"
+RUN sudo -u ubuntu -H bash -l -c "echo 'gem: -N' >> /home/ubuntu/.gemrc"
 
 # (Options) This is personal purpose
 RUN sudo -u ubuntu -H bash -l -c "mkdir -p /home/ubuntu/.ssh"
@@ -59,10 +59,21 @@ RUN sudo -u ubuntu -H bash -l -c "xargs -L 1 rvm install < /home/ubuntu/.rubyver
 # Install Bundler for each version of ruby
 RUN sudo -u ubuntu -H bash -l -c 'for v in $(cat /home/ubuntu/.rubyversions); do rvm use --default $v; gem install bundle; done'
 
+# NVM
+ENV NVM_DIR /usr/local/nvm
+RUN \curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.31.1/install.sh | PROFILE=/etc/bash.bashrc NVM_DIR=$NVM_DIR bash
+RUN groupadd nvm
+RUN chmod g+w $NVM_DIR
+RUN chown -R root:nvm $NVM_DIR
+RUN adduser ubuntu nvm
 
-RUN mkdir -p /opt/www
+Add nodeversions.txt /home/ubuntu/.nodeversions
+# Install bower for each version of node
+RUN sudo -u ubuntu -H bash -l -c 'source /usr/local/nvm/nvm.sh && for v in $(cat /home/ubuntu/.nodeversions); do nvm install $v && npm install bower gulp -g; done'
 
-VOLUME [ "/opt/www" ]
+RUN mkdir -p /opt/develop
+
+VOLUME [ "/opt/develop" ]
 
 # Expose port
 EXPOSE 22

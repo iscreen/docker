@@ -22,7 +22,7 @@ services:
 
   gitlab:
     restart: always
-    image: sameersbn/gitlab:8.11.2-1
+    image: sameersbn/gitlab:8.11.4
     depends_on:
     - redis
     - postgresql
@@ -56,7 +56,7 @@ services:
     - GITLAB_HTTPS=false
     - SSL_SELF_SIGNED=false
 
-    - GITLAB_HOST=localhost
+    - GITLAB_HOST=192.168.11.65
     - GITLAB_PORT=10080
     - GITLAB_SSH_PORT=10022
     - GITLAB_RELATIVE_URL_ROOT=
@@ -164,6 +164,10 @@ services:
     - LDAP_PASS=
     - LDAP_ALLOW_USERNAME_OR_EMAIL_LOGIN=true
     - LDAP_BASE=ou=users,dc=iscreen,dc=com
+    # networks:
+    #   default:
+    #     ipv4_address: 172.18.0.4
+        #ipv6_address: 2001:3984:3989::10
 
   # 這部份需要註冊，註冊後方可使用
   gitlab-ci-runner:
@@ -172,5 +176,18 @@ services:
     depends_on:
     - gitlab
     volumes:
-    # - /var/run/docker.sock:/var/run/docker.sock
-    - /Users/iscreen/data/docker/gitlab/gitlab-runner:/etc/gitlab-runner
+    - /var/run/docker.sock:/var/run/docker.sock
+    - /Users/iscreen/data/docker/gitlab/gitlab-runner:/home/gitlab_ci_runner/data
+
+# networks:
+#   app_net:
+#     driver: bridge
+#     driver_opts:
+#       com.docker.network.enable_ipv6: "true"
+#     ipam:
+#       driver: default
+#       config:
+#       - subnet: 172.16.238.0/24
+#         gateway: 172.16.238.1
+#       - subnet: 2001:3984:3989::/64
+#         gateway: 2001:3984:3989::1

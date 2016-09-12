@@ -1,97 +1,115 @@
-mysql:
-  restart: always
-  image: mysql:5.6
-  ports:
-    -  "3306:3306"
-  volumes:
-    - /Users/iscreen/data/docker/container/mysqldata:/var/lib/mysql
-  environment:
-    MYSQL_ROOT_PASSWORD: iscreen
-  # container_name: mysql-database
-mariadb:
-  restart: always
-  image: mariadb:latest
-#  ports:
-#    -  "3308:3306"
-  volumes:
-    - /Users/iscreen/data/docker/container/mariadata:/var/lib/mysql
-  environment:
-    MYSQL_ROOT_PASSWORD: iscreen
-  # container_name: maria-db
-mysql57:
-  restart: always
-  image: mysql:5.7.14
-  # ports:
-  #   - "3307:3306"
-  volumes:
-    - /Users/iscreen/data/docker/container/mysqldata-5.7:/var/lib/mysql
-  environment:
-    MYSQL_ROOT_PASSWORD: iscreen
-  # container_name: mysql5.7-database
-redis:
-  restart: always
-  image: redis
-  ports:
-    - "6379:6379"
-  container_name: redis
-phpmyadmin:
-  restart: always
-  image: phpmyadmin/phpmyadmin
-  ports:
-    - "8000:80"
-  links:
+version: '2'
+
+services:
+  mysql:
+    restart: always
+    image: mysql:5.6
+    ports:
+      -  "3306:3306"
+    volumes:
+      - /Users/iscreen/data/docker/container/mysqldata:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: iscreen
+    # container_name: mysql-database
+  mariadb:
+    restart: always
+    image: mariadb:latest
+  #  ports:
+  #    -  "3308:3306"
+    volumes:
+      - /Users/iscreen/data/docker/container/mariadata:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: iscreen
+    # container_name: maria-db
+  mysql57:
+    restart: always
+    image: mysql:5.7.14
+    # ports:
+    #   - "3307:3306"
+    volumes:
+      - /Users/iscreen/data/docker/container/mysqldata-5.7:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: iscreen
+    # container_name: mysql5.7-database
+  redis:
+    restart: always
+    image: redis
+    ports:
+      - "6379:6379"
+    container_name: redis
+  phpmyadmin:
+    restart: always
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - "8000:80"
+    depends_on:
     - mysql
     - mariadb
     - mysql57
-  volumes:
-    - /Users/iscreen/develop/taxi/taxiVIP:/opt/taxiVIP
-    - /Users/iscreen/develop/d2d/ads-demo:/opt/ads-demo
-  environment:
-    # PMA_URI: "http://localhost/pdm/"
-    PMA_HOSTS: mysql,mariadb,mysql57
-    PMA_PORT: 3306
-  extra_hosts:
-    - "taxiDB:localhost"
-  # container_name: phpmyadmin
-#registry:
-#  restart: always
-#  image: registry:2
-#  ports:
-#    - 5000:5000
-#  environment:
-#    REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY: /var/lib/registry
-#  #   REGISTRY_HTTP_TLS_CERTIFICATE: /certs/domain.crt
-#  #   REGISTRY_HTTP_TLS_KEY: /certs/domain.key
-#  #   REGISTRY_AUTH: htpasswd
-#  #   REGISTRY_AUTH_HTPASSWD_PATH: /auth/htpasswd
-#  #   REGISTRY_AUTH_HTPASSWD_REALM: Registry Realm
-#  volumes:
-#    - /Users/iscreen/data/registry/data:/var/lib/registry
-#    - /Users/iscreen/data/registry/certs:/certs
-#    - /Users/iscreen/data/registry/auth:/auth
-#  container_name: my_docker_hub
-mongodb:
-  restart: always
-  image: mongo:3.2
-  ports:
-    - 27017:27017
-  volumes:
-    - /Users/iscreen/data/docker/container/mongodb:/data/db
-  # container_name: mongodb
-#sphinx:
-#  image: leodido/sphinxsearch
-#  environment:
-#    MYSQL_HOST: 192.168.99.100
-#    MYSQL_USER: root
-#    MYSQL_PASSWORD: iscreen
-#  links:
-#    - mysql
-#  ports:
-#    - 9312:9312
-#    - 9306:9306
-#  container_name: sphinx
-memcached:
-  image: memcached:latest
-  ports:
-    - 11211:11211
-  # container_name: memcached
+    # links:
+    #   - mysql
+    #   - mariadb
+    #   - mysql57
+    # volumes:
+    #   - /Users/iscreen/develop/taxi/taxiVIP:/opt/taxiVIP
+    #   - /Users/iscreen/develop/d2d/ads-demo:/opt/ads-demo
+    environment:
+      # PMA_URI: "http://localhost/pdm/"
+      PMA_HOSTS: mysql,mariadb,mysql57
+      # PMA_PORT: 3306
+    extra_hosts:
+      - "taxiDB:localhost"
+    # container_name: phpmyadmin
+  #registry:
+  #  restart: always
+  #  image: registry:2
+  #  ports:
+  #    - 5000:5000
+  #  environment:
+  #    REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY: /var/lib/registry
+  #  #   REGISTRY_HTTP_TLS_CERTIFICATE: /certs/domain.crt
+  #  #   REGISTRY_HTTP_TLS_KEY: /certs/domain.key
+  #  #   REGISTRY_AUTH: htpasswd
+  #  #   REGISTRY_AUTH_HTPASSWD_PATH: /auth/htpasswd
+  #  #   REGISTRY_AUTH_HTPASSWD_REALM: Registry Realm
+  #  volumes:
+  #    - /Users/iscreen/data/registry/data:/var/lib/registry
+  #    - /Users/iscreen/data/registry/certs:/certs
+  #    - /Users/iscreen/data/registry/auth:/auth
+  #  container_name: my_docker_hub
+  mongodb:
+    restart: always
+    image: mongo:3.2
+    ports:
+      - 27017:27017
+    volumes:
+      - /Users/iscreen/data/docker/container/mongodb:/data/db
+    # container_name: mongodb
+  sphinx:
+   image: leodido/sphinxsearch
+   environment:
+     MYSQL_HOST: mysql
+     MYSQL_USER: root
+     MYSQL_PASSWORD: iscreen
+   links:
+     - mysql
+   ports:
+     - 9312:9312
+     - 9306:9306
+   container_name: sphinx
+  memcached:
+    image: memcached:latest
+    ports:
+      - 11211:11211
+    container_name: memcached
+  php-nginx:
+    restart: always
+    image: richarvey/nginx-php-fpm
+    ports:
+      - "8080:80"
+    links:
+      - mysql
+      - mariadb
+      - mysql57
+    volumes:
+      - /Users/iscreen/develop/taxi/taxiVIP:/var/www/html
