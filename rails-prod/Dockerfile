@@ -18,6 +18,8 @@ RUN apt-get install -y zlib1g-dev libssl-dev libreadline-dev libyaml-dev libxml2
 RUN apt-get install -y gawk libsqlite3-dev sqlite3 autoconf libgdbm-dev libncurses5-dev automake libtool bison pkg-config libffi-dev
 RUN apt-get install -y imagemagick
 RUN apt-get install -y vim memcached redis-server mysql-client
+RUN apt-get install -y python
+
 #
 # RUN apt-get install -y sphinxsearch
 RUN apt-get clean
