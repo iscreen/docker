@@ -5,13 +5,13 @@ services:
     restart: always
     build: ./nginx
     volumes:
-    - ./conf.d:/etc/nginx/conf.d/
-    - ./html:/usr/share/nginx/html:Z
-    - ./logs:/var/log/nginx
+    - /opt/nginx/conf.d:/etc/nginx/conf.d/
+    - /opt/nginx/html:/usr/share/nginx/html:Z
+    - /var/log/nginx:/var/log/nginx
     ports:
-    - "8081:80"
-    - "8082:443"
+    - "80:80"
+    - "443:443"
     # environment:
     # - NGINX_HOST=foobar.com
     # - NGINX_PORT=80
-    # command: /bin/bash -c "envsubst < /etc/nginx/conf.d/mysite.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
+    #command: /bin/bash -c "envsubst < ./conf.d/default.conf > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
