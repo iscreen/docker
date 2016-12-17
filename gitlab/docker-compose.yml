@@ -7,13 +7,13 @@ services:
     command:
     - --loglevel warning
     volumes:
-    - /Users/iscreen/data/docker/gitlab/redis:/var/lib/redis:Z
+    - ${GITLAB_TARGET}/gitlab/redis:/var/lib/redis:Z
 
   postgresql:
     restart: always
-    image: sameersbn/postgresql:9.5-1
+    image: sameersbn/postgresql:9.5-3
     volumes:
-    - /Users/iscreen/data/docker/gitlab/postgresql:/var/lib/postgresql:Z
+    - ${GITLAB_TARGET}/gitlab/postgresql:/var/lib/postgresql:Z
     environment:
     - DB_USER=gitlab
     - DB_PASS=password
@@ -22,7 +22,7 @@ services:
 
   gitlab:
     restart: always
-    image: sameersbn/gitlab:8.11.4
+    image: sameersbn/gitlab:8.14.5
     depends_on:
     - redis
     - postgresql
@@ -30,9 +30,8 @@ services:
     - "10080:80"
     - "10022:22"
     volumes:
-    - /Users/iscreen/data/docker/gitlab/gitlab:/home/git/data:Z
-    - /Users/iscreen/data/docker/gitlab/log:/var/log/gitlab
-    # - /Users/iscreen/data/docker/gitlab/certs:/certs
+    - ${GITLAB_TARGET}/gitlab/gitlab:/home/git/data:Z
+    - ${GITLAB_TARGET}/docker/gitlab/log:/var/log/gitlab
     environment:
     - DEBUG=false
 
@@ -177,7 +176,7 @@ services:
     - gitlab
     volumes:
     - /var/run/docker.sock:/var/run/docker.sock
-    - /Users/iscreen/data/docker/gitlab/gitlab-runner:/home/gitlab_ci_runner/data
+    - ${GITLAB_TARGET}/gitlab/gitlab-runner:/home/gitlab_ci_runner/data
 
 # networks:
 #   app_net:

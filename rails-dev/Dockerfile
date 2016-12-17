@@ -58,7 +58,7 @@ RUN sudo -u ubuntu -H bash -l -c "rvm autolibs 3"
 RUN sudo -u ubuntu -H bash -l -c "xargs -L 1 rvm install < /home/ubuntu/.rubyversions"
 
 # Install Bundler for each version of ruby
-RUN sudo -u ubuntu -H bash -l -c 'for v in $(cat /home/ubuntu/.rubyversions); do rvm use --default $v; gem install bundle; done'
+RUN sudo -u ubuntu -H bash -l -c 'for v in $(cat /home/ubuntu/.rubyversions); do rvm use --default $v; gem install bundle -N; done'
 
 # NVM
 ENV NVM_DIR /usr/local/nvm

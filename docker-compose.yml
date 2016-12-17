@@ -5,7 +5,7 @@ services:
     restart: always
     image: mysql:5.6
     ports:
-      -  "3306:3306"
+      - "3306:3306"
     volumes:
       - /Users/iscreen/data/docker/container/mysqldata:/var/lib/mysql
     environment:
@@ -24,8 +24,8 @@ services:
   mysql57:
     restart: always
     image: mysql:5.7.14
-    # ports:
-    #   - "3307:3306"
+    ports:
+      - "3307:3306"
     volumes:
       - /Users/iscreen/data/docker/container/mysqldata-5.7:/var/lib/mysql
     environment:
@@ -46,10 +46,10 @@ services:
     - mysql
     - mariadb
     - mysql57
-    # links:
-    #   - mysql
-    #   - mariadb
-    #   - mysql57
+    links:
+      - mysql
+      - mariadb
+      # - mysql57
     # volumes:
     #   - /Users/iscreen/develop/taxi/taxiVIP:/opt/taxiVIP
     #   - /Users/iscreen/develop/d2d/ads-demo:/opt/ads-demo
@@ -57,8 +57,8 @@ services:
       # PMA_URI: "http://localhost/pdm/"
       PMA_HOSTS: mysql,mariadb,mysql57
       # PMA_PORT: 3306
-    extra_hosts:
-      - "taxiDB:localhost"
+    # extra_hosts:
+    #   - "taxiDB:localhost"
     # container_name: phpmyadmin
   #registry:
   #  restart: always
@@ -86,30 +86,46 @@ services:
       - /Users/iscreen/data/docker/container/mongodb:/data/db
     # container_name: mongodb
   sphinx:
-   image: leodido/sphinxsearch
-   environment:
-     MYSQL_HOST: mysql
-     MYSQL_USER: root
-     MYSQL_PASSWORD: iscreen
-   links:
-     - mysql
-   ports:
-     - 9312:9312
-     - 9306:9306
-   container_name: sphinx
+    image: romeoz/docker-sphinxsearch
+    restart: always
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_USER: root
+      MYSQL_PASSWORD: iscreen
+    depends_on:
+    - mysql
+    links:
+    - mysql
+    ports:
+      - 9312:9312
+      - 9306:9306
+  # sphinx:
+  #  image: leodido/sphinxsearch
+  #  environment:
+  #    MYSQL_HOST: mysql
+  #    MYSQL_USER: root
+  #    MYSQL_PASSWORD: iscreen
+  #  depends_on:
+  #  - mysql
+  #  links:
+  #  - mysql
+  #  ports:
+  #    - 9312:9312
+  #    - 9306:9306
+  #  container_name: sphinx
   memcached:
     image: memcached:latest
     ports:
       - 11211:11211
     container_name: memcached
-  php-nginx:
-    restart: always
-    image: richarvey/nginx-php-fpm
-    ports:
-      - "8080:80"
-    links:
-      - mysql
-      - mariadb
-      - mysql57
-    volumes:
-      - /Users/iscreen/develop/taxi/taxiVIP:/var/www/html
+  # php-nginx:
+  #   restart: always
+  #   image: richarvey/nginx-php-fpm
+  #   ports:
+  #     - "8080:80"
+  #   links:
+  #     - mysql
+  #     - mariadb
+  #     # - mysql57
+  #   volumes:
+  #     - /Users/iscreen/develop/taxi/taxiVIP:/var/www/html

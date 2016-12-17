@@ -11,3 +11,4 @@ gitlab/gitlab-runner
 gitlab/log
 
 gitlab-runner
+.env

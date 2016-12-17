@@ -1,0 +1,16 @@
+version: '2'
+
+services:
+  graphite:
+    restart: always
+    image: hopsoft/graphite-statsd
+    ports:
+      - "82:80"
+      - "2003-2004:2003-2004"
+      - "2023-2024:2023-2024"
+      - "8125:8125/udp"
+      - "8126:8126"
+    volumes:
+      - /Users/iscreen/data/monit/graphite/configs:/opt/graphite/conf
+      - /Users/iscreen/data/monit/graphite/data:/opt/graphite/storage
+      - /Users/iscreen/data/monit/statsd:/opt/statsd
