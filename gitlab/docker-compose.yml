@@ -22,7 +22,7 @@ services:
 
   gitlab:
     restart: always
-    image: sameersbn/gitlab:8.14.5
+    image: sameersbn/gitlab:8.15.4
     depends_on:
     - redis
     - postgresql
@@ -48,14 +48,14 @@ services:
     - TZ=Asia/Taipei
     - GITLAB_TIMEZONE=Taipei
 
-    - GITLAB_SIGNUP_ENABLED=true
+    - GITLAB_SIGNUP_ENABLED=false
     - GITLAB_CREATE_GROUP=false
     # - GITLAB_REGISTRY_ENABLED=false
 
-    - GITLAB_HTTPS=false
+    - GITLAB_HTTPS=true
     - SSL_SELF_SIGNED=false
 
-    - GITLAB_HOST=192.168.11.65
+    - GITLAB_HOST=scm.iscreen.com
     - GITLAB_PORT=10080
     - GITLAB_SSH_PORT=10022
     - GITLAB_RELATIVE_URL_ROOT=
@@ -63,25 +63,25 @@ services:
     - GITLAB_SECRETS_SECRET_KEY_BASE=long-and-random-alphanumeric-string
     - GITLAB_SECRETS_OTP_KEY_BASE=long-and-random-alphanumeric-string
 
-    - GITLAB_ROOT_PASSWORD=5iveL!fe
-    - GITLAB_ROOT_EMAIL=
+    - GITLAB_ROOT_PASSWORD=Bgt56yhn
+    - GITLAB_ROOT_EMAIL=dean.lin@iscreen.com
 
     - GITLAB_NOTIFY_ON_BROKEN_BUILDS=true
     - GITLAB_NOTIFY_PUSHER=false
 
-    - GITLAB_EMAIL=notifications@example.com
-    - GITLAB_EMAIL_REPLY_TO=noreply@example.com
-    - GITLAB_INCOMING_EMAIL_ADDRESS=reply@example.com
+    - GITLAB_EMAIL=servermis@iscreen.com
+    - GITLAB_EMAIL_REPLY_TO=noreply@iscreen.com
+    - GITLAB_INCOMING_EMAIL_ADDRESS=servermis@iscreen.com
 
     - GITLAB_BACKUP_SCHEDULE=daily
     - GITLAB_BACKUP_TIME=01:00
 
     - SMTP_ENABLED=false
-    - SMTP_DOMAIN=www.example.com
-    - SMTP_HOST=smtp.gmail.com
+    - SMTP_DOMAIN=iscreen.com
+    - SMTP_HOST=smtp.iscreen.com
     - SMTP_PORT=587
-    - SMTP_USER=mailer@example.com
-    - SMTP_PASS=password
+    - SMTP_USER= #servermis@iscreen.com
+    - SMTP_PASS= #password
     - SMTP_STARTTLS=true
     - SMTP_AUTHENTICATION=login
 
@@ -156,11 +156,12 @@ services:
 
     - LDAP_ENABLED=true
     - LDAP_HOST=ldap.iscreen.com
-    - LDAP_PORT=636
+    - LDAP_PORT=389  # 636
     - LDAP_UID=uid
-    - LDAP_METHOD=ssl
+    - LDAP_METHOD=plain #ssl
     - LDAP_BIND_DN=
     - LDAP_PASS=
+    - LDAP_ACTIVE_DIRECTORY=false
     - LDAP_ALLOW_USERNAME_OR_EMAIL_LOGIN=true
     - LDAP_BASE=ou=users,dc=iscreen,dc=com
     # networks:
@@ -169,14 +170,14 @@ services:
         #ipv6_address: 2001:3984:3989::10
 
   # 這部份需要註冊，註冊後方可使用
-  gitlab-ci-runner:
-    restart: always
-    image: sameersbn/gitlab-ci-runner:5.2.1
-    depends_on:
-    - gitlab
-    volumes:
-    - /var/run/docker.sock:/var/run/docker.sock
-    - ${GITLAB_TARGET}/gitlab/gitlab-runner:/home/gitlab_ci_runner/data
+  # gitlab-ci-runner:
+  #   restart: always
+  #   image: sameersbn/gitlab-ci-runner:5.2.1
+  #   depends_on:
+  #   - gitlab
+  #   volumes:
+  #   - /var/run/docker.sock:/var/run/docker.sock
+  #   - ${GITLAB_TARGET}/gitlab/gitlab-runner:/home/gitlab_ci_runner/data
 
 # networks:
 #   app_net:
