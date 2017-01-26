@@ -16,6 +16,8 @@ RUN apt-get update
 RUN apt-get install -y build-essential curl git
 RUN apt-get install -y zlib1g-dev libssl-dev libreadline-dev libyaml-dev libxml2-dev libxslt-dev libmysqlclient-dev ffmpeg
 RUN apt-get install -y gawk libsqlite3-dev sqlite3 autoconf libgdbm-dev libncurses5-dev automake libtool bison pkg-config libffi-dev
+
+RUN apt-get update
 RUN apt-get install -y vim
 RUN apt-get install -y python
 
@@ -72,6 +74,16 @@ RUN adduser ubuntu nvm
 Add nodeversions.txt /home/ubuntu/.nodeversions
 # Install bower for each version of node
 RUN sudo -u ubuntu -H bash -l -c 'source /usr/local/nvm/nvm.sh && for v in $(cat /home/ubuntu/.nodeversions); do nvm install $v && npm install bower gulp -g; done'
+
+# Install Oracle Java Silent
+RUN apt-get update
+RUN apt-get install -y software-properties-common
+RUN add-apt-repository ppa:webupd8team/java && apt-get update
+RUN echo "oracle-java7-installer shared/accepted-oracle-license-v1-1 select true" | debconf-set-selections
+RUN echo "oracle-java7-installer shared/accepted-oracle-license-v1-1 seen true" | debconf-set-selections
+RUN apt-get install -y oracle-java7-installer
+RUN update-java-alternatives -s java-7-oracle
+RUN apt-get install -y oracle-java7-set-default
 
 # RUN mkdir -p /opt/www
 # VOLUME [ "/opt/www" ]
