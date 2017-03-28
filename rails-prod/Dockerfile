@@ -28,6 +28,16 @@ RUN apt-get clean
 RUN apt-get install -y sudo lsof net-tools openssh-server
 RUN mkdir /var/run/sshd
 
+# Install Oracle Java Silent
+RUN apt-get update
+RUN apt-get install -y software-properties-common
+RUN add-apt-repository ppa:webupd8team/java && apt-get update
+RUN echo "oracle-java7-installer shared/accepted-oracle-license-v1-1 select true" | debconf-set-selections
+RUN echo "oracle-java7-installer shared/accepted-oracle-license-v1-1 seen true" | debconf-set-selections
+RUN apt-get install -y oracle-java7-installer
+RUN update-java-alternatives -s java-7-oracle
+RUN apt-get install -y oracle-java7-set-default
+
 # Create default user
 RUN useradd -m -G sudo,root -s /bin/bash ubuntu
 # Gem setting for root/ubuntu
@@ -39,6 +49,7 @@ RUN sudo -u ubuntu -H bash -l -c "echo 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCg
 RUN sudo -u ubuntu -H bash -l -c "chmod 600 /home/ubuntu/.ssh/authorized_keys"
 RUN sudo -u ubuntu -H bash -l -c "echo \"PATH=/bin:/usr/bin:/usr/local/bin:${PATH}\n export PATH\" >> ~/.bashrc"
 RUN echo 'ubuntu\tALL=(ALL:ALL) NOPASSWD:ALL' >> /etc/sudoers.d/90-cloud-users
+RUN echo 'Host *\n  StrictHostKeyChecking no' >> /home/ubuntu/.ssh/config
 
 # Install rvm
 RUN gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
@@ -63,7 +74,7 @@ RUN sudo -u ubuntu -H bash -l -c 'for v in $(cat /home/ubuntu/.rubyversions); do
 
 # NVM
 ENV NVM_DIR /usr/local/nvm
-RUN \curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.31.1/install.sh | PROFILE=/etc/bash.bashrc NVM_DIR=$NVM_DIR bash
+RUN \curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.0/install.sh | PROFILE=/etc/bash.bashrc NVM_DIR=$NVM_DIR bash
 RUN groupadd nvm
 RUN chmod g+w $NVM_DIR
 RUN chown -R root:nvm $NVM_DIR
@@ -72,6 +83,10 @@ RUN adduser ubuntu nvm
 Add nodeversions.txt /home/ubuntu/.nodeversions
 # Install bower for each version of node
 RUN sudo -u ubuntu -H bash -l -c 'source /usr/local/nvm/nvm.sh && for v in $(cat /home/ubuntu/.nodeversions); do nvm install $v && npm install bower gulp -g; done'
+
+RUN \wget -O /usr/local/bin/apktool.jar https://bitbucket.org/iBotPeaches/apktool/downloads/apktool_2.2.1.jar
+RUN \curl https://raw.githubusercontent.com/iBotPeaches/Apktool/master/scripts/linux/apktool -o /usr/local/bin/apktool
+RUN \chmod +x /usr/local/bin/apktool
 
 # RUN mkdir -p /opt/www
 # VOLUME [ "/opt/www" ]
